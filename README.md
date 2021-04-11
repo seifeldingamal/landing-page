@@ -17,3 +17,5 @@
 - Get section y coordinate to go to after click
 - Checks if page is scrolled down to show to top button
 - Scrolls to top on click
+- Checks if element is in viewport
+- Highlights active navbar link

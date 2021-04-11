@@ -52,10 +52,21 @@ function isInViewport(element) {
     const rect = element.getBoundingClientRect();
     return (
         rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
     );
+}
+
+// highlights the selected section in navbar
+
+function underline(element){
+    const nav = document.getElementsByTagName('a');
+    for(let item of nav){
+        if(item.id === element.id){
+            item.classList.add("underline");
+        } else {
+            item.classList.remove("underline");
+        }
+    }
 }
 
 /**
@@ -72,7 +83,7 @@ function buildNav(){
         let newLi = document.createElement('li');
         //newLi.setAttribute('id', '#' + item.id);
         let newLink = document.createElement('a');
-        newLink.setAttribute('id', '#' + item.id);
+        newLink.setAttribute('id', item.id);
         newLink.setAttribute('class', 'menu__link');
         newLink.textContent = item.dataset.nav;
         newLi.appendChild(newLink);
@@ -81,9 +92,7 @@ function buildNav(){
         // Creates event listener for on click
         newLi.addEventListener('click',function(event){
             // applies scroll function
-            scroll(item.id);
-            underline(event.target);
-
+            scroll('#' + item.id);
         });
     })
 }
@@ -124,18 +133,7 @@ function scroll(i){
 
 //
 
-function underline(element){
-    const nav = document.getElementsByTagName('a');
-    console.log(nav);
-    console.log(element);
-    for(let item of nav){
-        if(item.id === element.id){
-            item.classList.add("underline");
-        } else {
-            item.classList.remove("underline");
-        }
-    }
-}
+//function dynamicActive()
 
 /**
  * End Main Functions
@@ -154,3 +152,17 @@ window.onscroll = function() {scrollFunction()};
 
 // Set sections as active
 document.addEventListener("scroll", activeSection);
+
+// Set sections as active in navbar
+document.addEventListener("scroll", function(){
+    list.forEach(function(element){
+        if(isInViewport(element)){
+            const nav = document.getElementsByTagName('a');
+            for(let item of nav){
+                if(item.id === element.id){
+                    underline(item);
+                }
+            }
+        }
+    })
+});
