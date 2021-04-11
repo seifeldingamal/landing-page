@@ -33,12 +33,6 @@ const coll = document.getElementsByClassName("collapsible");
  *
 */
 
-// Grab section coordiate
-function y__coordinate(obj) {
-    const clicked = obj.getBoundingClientRect();
-    return clicked.y;
-}
-
 // When the user scrolls down 20px from the top of the document, show the button
 function scrollFunction() {
   if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
@@ -53,6 +47,16 @@ function topFunction() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+// Check if section in view
+function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
 
 /**
  * End Helper Functions
@@ -65,18 +69,21 @@ function buildNav(){
     // loops over sections
     list.forEach(function(item){
         // creates new list item containing link
-        var newLi = document.createElement('li');
-        var newLink = document.createElement('a');
-        newLink.setAttribute('href', '#'+item.id);
+        let newLi = document.createElement('li');
+        //newLi.setAttribute('id', '#' + item.id);
+        let newLink = document.createElement('a');
+        newLink.setAttribute('id', '#' + item.id);
         newLink.setAttribute('class', 'menu__link');
         newLink.textContent = item.dataset.nav;
         newLi.appendChild(newLink);
         const nav = document.querySelector('ul');
         nav.appendChild(newLi);
         // Creates event listener for on click
-        newLi.addEventListener('click',function(){
+        newLi.addEventListener('click',function(event){
             // applies scroll function
             scroll(item.id);
+            underline(event.target);
+
         });
     })
 }
@@ -86,7 +93,7 @@ function collapse() {
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
-            var content = this.nextElementSibling;
+            let content = this.nextElementSibling;
             if (content.style.display === "block") {
                 content.style.display = "none";
             } else {
@@ -108,10 +115,26 @@ function activeSection(){
     })
 }
 
-// Scroll to anchor ID using scrollTO event
+// Scroll to anchor ID
 function scroll(i){
     // uses helper function to find secton position
-    window.scrollTo(0, y__coordinate(document.getElementById(i)));
+    var elmnt = document.getElementById(i);
+    elmnt.scrollIntoView();
+}
+
+//
+
+function underline(element){
+    const nav = document.getElementsByTagName('a');
+    console.log(nav);
+    console.log(element);
+    for(let item of nav){
+        if(item.id === element.id){
+            item.classList.add("underline");
+        } else {
+            item.classList.remove("underline");
+        }
+    }
 }
 
 /**
