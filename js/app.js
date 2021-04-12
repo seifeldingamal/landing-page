@@ -81,9 +81,8 @@ function buildNav(){
     list.forEach(function(item){
         // creates new list item containing link
         let newLi = document.createElement('li');
-        //newLi.setAttribute('id', '#' + item.id);
         let newLink = document.createElement('a');
-        newLink.setAttribute('id', item.id);
+        newLink.setAttribute('id', '#' + item.id);
         newLink.setAttribute('class', 'menu__link');
         newLink.textContent = item.dataset.nav;
         newLi.appendChild(newLink);
@@ -92,7 +91,7 @@ function buildNav(){
         // Creates event listener for on click
         newLi.addEventListener('click',function(event){
             // applies scroll function
-            scroll('#' + item.id);
+            scroll(item.id);
         });
     })
 }
@@ -159,7 +158,7 @@ document.addEventListener("scroll", function(){
         if(isInViewport(element)){
             const nav = document.getElementsByTagName('a');
             for(let item of nav){
-                if(item.id === element.id){
+                if(item.id === '#' + element.id){
                     underline(item);
                 }
             }
